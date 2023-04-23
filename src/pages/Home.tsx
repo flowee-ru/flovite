@@ -4,7 +4,7 @@ function Home() {
 	return (
 		<>
 			<Helmet>
-				<title>hello vite</title>
+				<title>Flowee</title>
 			</Helmet>
 			<span>hello vite</span>
 		</>
