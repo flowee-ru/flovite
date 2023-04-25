@@ -9,10 +9,25 @@ import Player from "../components/Player"
 const StreamWrapper = styled.div`
 	display: flex;
 	justify-content: center;
+	align-items: start;
 	gap: 10px;
-	@media screen and (max-width: 1700px) {
+	@media screen and (max-width: 950px) {
 		flex-direction: column;
 	}
+`
+
+const ProfileWrapper = styled.div`
+	display: flex;
+	gap: 10px;
+	background-color: gray;
+	margin-left: 100px;
+`
+const Avatar = styled.img`
+	max-width: 50px;
+	max-height: 50px;
+	min-width: 50px;
+	min-height: 50px;
+	border-radius: 100%;
 `
 
 function Profile() {
@@ -28,6 +43,9 @@ function Profile() {
 				<Player url="http://127.0.0.1:8089/6442905abb05652e3a75cc7f" />
 				<Chat />
 			</StreamWrapper>
+			<ProfileWrapper>
+				<Avatar src="https://github.com/mdo.png" alt="mdo" />
+			</ProfileWrapper>
 		</>
 	)
 }

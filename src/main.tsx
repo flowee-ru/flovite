@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import './styles/globals.css'
 
 import Home from './pages/Home.tsx'
-import Profile from './pages/Profile.tsx'
+import Stream from './pages/Stream.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/:username',
-    element: <Profile />,
+    element: <Stream />,
   },
 ])
 

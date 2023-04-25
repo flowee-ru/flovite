@@ -3,8 +3,8 @@ import { useEffect } from "react"
 import styled from "styled-components"
 
 const Video = styled.video`
-    max-width: 100%;
-    height: 650px;
+    max-width: 1200px;
+    width: 100%;
 `
 
 type Props = {

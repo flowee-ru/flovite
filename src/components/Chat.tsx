@@ -10,10 +10,10 @@ const Wrapper = styled.div`
     max-width: 400px;
     min-width: 400px;
     height: 650px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     background-color: #222222;
-    @media screen and (max-width: 1700px) {
+    @media screen and (max-width: 950px) {
         min-width: 100%;
     }
 `
