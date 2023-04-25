@@ -3,6 +3,18 @@ import styled from "styled-components"
 import Input from "./Input"
 import ChatMessage from "./ChatMessage"
 
+function Chat() {
+    return (
+        <Wrapper>
+            <ChatTitle>CHAT</ChatTitle>
+            <MessagesBox className="no-scrollbar">
+                <ChatMessage username="myst" content="hello" />
+            </MessagesBox>
+            <Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px' }} />
+        </Wrapper>
+    )
+}
+
 const Wrapper = styled.div`
     display: flex;
     gap: 10px;
@@ -35,17 +47,5 @@ const MessagesBox = styled.div`
     padding-right: 10px;
     overflow-y: auto;
 `
-
-function Chat() {
-    return (
-        <Wrapper>
-            <ChatTitle>CHAT</ChatTitle>
-            <MessagesBox className="no-scrollbar">
-                <ChatMessage username="myst" content="hello" />
-            </MessagesBox>
-            <Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px' }} />
-        </Wrapper>
-    )
-}
 
 export default Chat

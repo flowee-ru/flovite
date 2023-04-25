@@ -1,5 +1,22 @@
 import styled from "styled-components"
 
+type Props = {
+    username: string,
+    content: string
+}
+
+function ChatMessage({ username, content }: Props) {
+    return (
+        <Wrapper>
+            <Avatar src="https://github.com/mdo.png" alt="mdo" width="45" className="unselectable" />
+            <MessageWrapper>
+                <Username>{username}</Username>
+                <Message>{content}</Message>
+            </MessageWrapper>
+        </Wrapper>
+    )
+}
+
 const Wrapper = styled.div`
     display: flex;
     gap: 10px;
@@ -26,22 +43,5 @@ const Username = styled.span`
 const Message = styled.span`
     color: white;
 `
-
-type Props = {
-    username: string,
-    content: string
-}
-
-function ChatMessage({ username, content }: Props) {
-    return (
-        <Wrapper>
-            <Avatar src="https://github.com/mdo.png" alt="mdo" width="45" className="unselectable" />
-            <MessageWrapper>
-                <Username>{username}</Username>
-                <Message>{content}</Message>
-            </MessageWrapper>
-        </Wrapper>
-    )
-}
 
 export default ChatMessage
