@@ -6,6 +6,8 @@
 
 body {
     background: linear-gradient(to right, #2a282a, #302933);
+    margin: 0;
+    padding: 0;
 }
 
 .unselectable {
@@ -14,4 +16,12 @@ body {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar { 
+    display: none;
 }
