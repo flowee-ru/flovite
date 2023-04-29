@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
 import Header from "../components/Header"
-import Chat from "../components/Chat"
-import Player from "../components/Player"
+import Chat from "../components/streams/Chat"
+import Player from "../components/streams/Player"
 
 function Profile() {
 	const { username } = useParams()

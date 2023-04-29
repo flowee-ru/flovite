@@ -10,6 +10,7 @@ const Wrapper = styled.button`
     border: none;
     font-weight: bold;
     font-size: 16px;
+    transition: opacity 0.2s;
     cursor: pointer;
     &:hover {
         opacity: 0.8;

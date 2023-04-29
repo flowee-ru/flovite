@@ -25,3 +25,8 @@ body {
 .no-scrollbar::-webkit-scrollbar { 
     display: none;
 }
+
+input {
+    outline: none;
+    border: none;
+}

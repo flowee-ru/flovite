@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import { Link, Form } from "react-router-dom"
 
-import Button from "./Button"
-import Input from "./Input"
+import Button from "./ui/Button"
+import Input from "./ui/Input"
 
 const Header = styled.header`
     display: flex;

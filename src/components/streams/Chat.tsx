@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-import Input from "./Input"
+import Input from "../ui/Input"
 import ChatMessage from "./ChatMessage"
 
 function Chat() {

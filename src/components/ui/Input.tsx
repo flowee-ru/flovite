@@ -10,9 +10,14 @@ const Field = styled.input`
     border: none;
     outline: none;
     font-size: 18px;
+    transition: outline 0.1s;
     caret-color: #8815ff;
+    outline-color: #8815ff;
     &:focus {
-        outline: 2px solid #8815ff;
+        outline: #8815ff solid 3px;
+    }
+    &:not(:focus) {
+        outline: #8815ff solid 0px;
     }
 `
 
