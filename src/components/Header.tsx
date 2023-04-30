@@ -14,6 +14,7 @@ type RegisterForm = {
     password?: string,
     captcha?: string,
     errorMessage?: string,
+    successMessage?: string,
     loading: boolean
 }
 type LoginForm = {
@@ -51,18 +52,63 @@ function Header() {
 
     const submitRegister = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        if(!registerForm.username || !registerForm.email || !registerForm.password || !registerForm.captcha) return
+
+        setRegisterForm({ ...registerForm, loading: true })
+
+        const data = new URLSearchParams()
+        data.append('username', registerForm.username)
+        data.append('email', registerForm.email)
+        data.append('password', registerForm.password)
+        data.append('captcha', registerForm.captcha)
+
+        axios.post(import.meta.env.VITE_API_HOST + '/auth/register', data)
+        .then(res => {
+            console.log(res.data)
+            setRegisterForm({ ...registerForm, loading: false })
+
+            if(res.data.success) {
+                setRegisterForm({ ...registerForm, successMessage: 'Check your email to verify your account', errorMessage: '' })
+            } else {
+                switch(res.data.errorCode) {
+                    case 1:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Username must be > 3 and < 15 symbols', successMessage: '' })
+                        break
+                    case 2:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Failed to verify captcha, try again', successMessage: '' })
+                        break
+                    case 3:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Username already taken', successMessage: '' })
+                        break
+                    case 4:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Account with this email already exists', successMessage: '' })
+                        break
+                    case 5:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Unexpected error, please try again', successMessage: '' })
+                        break
+
+                    default:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Unexpected error, please try again', successMessage: '' })
+                }
+            }
+        }).catch(err => {
+            console.log(err)
+            setLoginForm({ ...loginForm, errorMessage: 'Failed to fetch data, please try again' })
+        })
     }
+
     const submitLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if(!loginForm?.username || !loginForm.password) return
+        if(!loginForm.username || !loginForm.password) return
 
         setLoginForm({ ...loginForm, loading: true })
 
         const data = new URLSearchParams()
         data.append('username', loginForm.username)
         data.append('password', loginForm.password)
-        
+
         axios.post(import.meta.env.VITE_API_HOST + '/auth/login', data)
         .then(res => {
             console.log(res.data)
@@ -73,7 +119,7 @@ function Header() {
 
                 const now = new Date()
                 setCookie('token', res.data.token, { expires: new Date(now.setMonth(now.getMonth() + 1)) })
-                
+
                 window.location.reload()
             } else {
                 switch(res.data.errorCode) {
@@ -104,6 +150,7 @@ function Header() {
                         <PopupCaption><span className="wave">👋</span> Hello!</PopupCaption>
                         <PopupSubCaption>Create an account</PopupSubCaption>
                         {registerForm.errorMessage && <PopupError>{registerForm.errorMessage}</PopupError>}
+                        {registerForm.successMessage && <PopupSuccess>{registerForm.successMessage}</PopupSuccess>}
                         <PopupForm onSubmit={submitRegister}>
                             <Input placeholder="Username" onChange={(e) => { setRegisterForm({ ...registerForm, username: e.target.value }) }} required />
                             <Input placeholder="E-mail" type="email" onChange={(e) => { setRegisterForm({ ...registerForm, email: e.target.value }) }} required />
@@ -189,6 +236,10 @@ const PopupSubCaption = styled.span`
 `
 const PopupError = styled.span`
     color: #ff5c74;
+    margin-top: 10px;
+`
+const PopupSuccess = styled.span`
+    color: #28cc80;
     margin-top: 10px;
 `
 

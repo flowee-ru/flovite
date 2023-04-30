@@ -5,6 +5,7 @@ import './styles/globals.css'
 
 import Home from './pages/Home.tsx'
 import Stream from './pages/Stream.tsx'
+import VerifyAccount from './pages/VerifyAccount.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/:username',
     element: <Stream />,
+  },
+  {
+    path: '/verify',
+    element: <VerifyAccount />
   }
 ])
 
