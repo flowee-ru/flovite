@@ -1,5 +1,18 @@
 import styled from "styled-components"
 
+type Props = {
+    type?: string,
+    placeholder?: string,
+    name?: string,
+    style?: React.CSSProperties
+}
+
+function Input(props: Props) {
+    return (
+        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} />
+    )
+}
+
 const Field = styled.input`
     padding-left: 10px;
     padding-right: 10px;
@@ -20,18 +33,5 @@ const Field = styled.input`
         outline: #8815ff solid 0px;
     }
 `
-
-type Props = {
-    type?: string,
-    placeholder?: string,
-    name?: string,
-    style?: React.CSSProperties
-}
-
-function Input({ type = 'text', placeholder, name, style }: Props) {
-    return (
-        <Field type={type} placeholder={placeholder} name={name} style={style} />
-    )
-}
 
 export default Input

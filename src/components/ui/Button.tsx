@@ -18,12 +18,15 @@ const Wrapper = styled.button`
 `
 
 type Props = {
-    text: string
+    text: string,
+    style?: React.CSSProperties,
+    id?: string,
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 function Button(props: Props) {
     return (
-        <Wrapper>
+        <Wrapper style={props.style} onClick={props.onClick} id={props.id}>
             {props.text}
         </Wrapper>
     )
