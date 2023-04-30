@@ -1,11 +1,12 @@
-import { Helmet } from "react-helmet"
+import { useEffect } from "react"
 
 function Home() {
+	useEffect(() => {
+		document.title = `Flowee`
+	}, [])
+
 	return (
 		<>
-			<Helmet>
-				<title>Flowee</title>
-			</Helmet>
 			<span>hello vite</span>
 		</>
 	)
