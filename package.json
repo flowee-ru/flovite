@@ -8,14 +8,16 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "sirv dist --cors --single --host --port 8000"
+    "start": "sirv dist --cors --single --host --port 8080"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.8.1",
+    "axios": "^1.4.0",
     "flv.js": "^1.6.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-is": "16.8.0",
     "react-router-dom": "^6.10.0",

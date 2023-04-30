@@ -1,15 +1,18 @@
+import { ChangeEventHandler } from "react"
 import styled from "styled-components"
 
 type Props = {
     type?: string,
     placeholder?: string,
     name?: string,
-    style?: React.CSSProperties
+    style?: React.CSSProperties,
+    onChange?: ChangeEventHandler<HTMLInputElement>,
+    required?: boolean
 }
 
 function Input(props: Props) {
     return (
-        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} />
+        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} onChange={props.onChange} required={props.required} />
     )
 }
 

@@ -18,7 +18,7 @@ function Profile() {
 	const { username } = useParams()
 	const [messageHistory, setMessageHistory] = useState<Message[]>([])
 
-	const { lastMessage } = useWebSocket('ws://127.0.0.1:8000/ws?stream=6442905abb05652e3a75cc7f', {
+	const { lastMessage } = useWebSocket('ws://127.0.0.1:8081/ws?stream=6442905abb05652e3a75cc7f', {
 		onOpen: () => {
 			console.log('Websocket connection established')
 		},
@@ -49,7 +49,7 @@ function Profile() {
             <Header />
 			<Wrapper>
 				<StreamWrapper>
-					<Player url="http://127.0.0.1:8089/6442905abb05652e3a75cc7f" />
+					<Player url="http://127.0.0.1:8082/6442905abb05652e3a75cc7f" />
 					<InfoWrapper>
 						<Name>myst's stream</Name>
 						<UserWrapper>

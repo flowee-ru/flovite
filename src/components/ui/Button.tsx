@@ -1,5 +1,20 @@
 import styled from "styled-components"
 
+type Props = {
+    text: string,
+    style?: React.CSSProperties,
+    id?: string,
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
+}
+
+function Button(props: Props) {
+    return (
+        <Wrapper style={props.style} onClick={props.onClick} id={props.id}>
+            {props.text}
+        </Wrapper>
+    )
+}
+
 const Wrapper = styled.button`
     padding-left: 10px;
     padding-right: 10px;
@@ -16,20 +31,5 @@ const Wrapper = styled.button`
         opacity: 0.8;
     }
 `
-
-type Props = {
-    text: string,
-    style?: React.CSSProperties,
-    id?: string,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>
-}
-
-function Button(props: Props) {
-    return (
-        <Wrapper style={props.style} onClick={props.onClick} id={props.id}>
-            {props.text}
-        </Wrapper>
-    )
-}
 
 export default Button

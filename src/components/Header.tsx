@@ -1,14 +1,36 @@
 import styled from "styled-components"
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 import { Link, Form } from "react-router-dom"
 import HCaptcha from "@hcaptcha/react-hcaptcha"
 
 import Button from "./ui/Button"
 import Input from "./ui/Input"
+import axios from "axios"
+import { useCookies } from "react-cookie"
+
+type RegisterForm = {
+    username?: string,
+    email?: string,
+    password?: string,
+    captcha?: string,
+    errorMessage?: string,
+    loading: boolean
+}
+type LoginForm = {
+    username?: string,
+    password?: string,
+    errorMessage?: string,
+    loading: boolean
+}
 
 function Header() {
     const [registerOpened, setRegisterOpened] = useState(false)
     const [loginOpened, setLoginOpened] = useState(false)
+
+    const [registerForm, setRegisterForm] = useState<RegisterForm>({ loading: false })
+    const [loginForm, setLoginForm] = useState<LoginForm>({ loading: false })
+
+    const [, setCookie] = useCookies(['token'])
 
     document.onclick = (e) => {
         const el = e.target as HTMLElement
@@ -27,6 +49,48 @@ function Header() {
         setRegisterOpened(false)
     }
 
+    const submitRegister = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+    }
+    const submitLogin = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        if(!loginForm?.username || !loginForm.password) return
+
+        setLoginForm({ ...loginForm, loading: true })
+
+        const data = new URLSearchParams()
+        data.append('username', loginForm.username)
+        data.append('password', loginForm.password)
+        
+        axios.post(import.meta.env.VITE_API_HOST + '/auth/login', data)
+        .then(res => {
+            console.log(res.data)
+            setLoginForm({ ...loginForm, loading: false })
+
+            if(res.data.success) {
+                setLoginForm({ ...loginForm, errorMessage: '' })
+
+                const now = new Date()
+                setCookie('token', res.data.token, { expires: new Date(now.setMonth(now.getMonth() + 1)) })
+                
+                window.location.reload()
+            } else {
+                switch(res.data.errorCode) {
+                    case 1:
+                        setLoginForm({ ...loginForm, errorMessage: 'Wrong password or username' })
+                        break
+
+                    default:
+                        setLoginForm({ ...loginForm, errorMessage: 'Unexpected error, please try again' })
+                }
+            }
+        }).catch(err => {
+            console.log(err)
+            setLoginForm({ ...loginForm, errorMessage: 'Failed to fetch data, please try again' })
+        })
+    }
+
 	return (
 		<Wrapper>
             <Link to="/"><img src="/content/flowee.svg" alt="Flowee" width="55" className="unselectable" /></Link>
@@ -36,32 +100,35 @@ function Header() {
             <ProfileWrapper>
                 <Button id="register-button" text="Register" onClick={changeRegister} />
                 {registerOpened && (
-                    <RegisterPopup id="register-popup">
-                        <RegisterCaption><span className="wave">👋</span> Hello!</RegisterCaption>
-                        <RegisterSubCaption>Create an account</RegisterSubCaption>
-                        <RegisterForm>
-                            <Input placeholder="Username" />
-                            <Input placeholder="E-mail" type="email" />
-                            <Input placeholder="Password" type="password" />
+                    <Popup id="register-popup">
+                        <PopupCaption><span className="wave">👋</span> Hello!</PopupCaption>
+                        <PopupSubCaption>Create an account</PopupSubCaption>
+                        {registerForm.errorMessage && <PopupError>{registerForm.errorMessage}</PopupError>}
+                        <PopupForm onSubmit={submitRegister}>
+                            <Input placeholder="Username" onChange={(e) => { setRegisterForm({ ...registerForm, username: e.target.value }) }} required />
+                            <Input placeholder="E-mail" type="email" onChange={(e) => { setRegisterForm({ ...registerForm, email: e.target.value }) }} required />
+                            <Input placeholder="Password" type="password" onChange={(e) => { setRegisterForm({ ...registerForm, password: e.target.value }) }} required />
                             <HCaptcha
                                 sitekey={import.meta.env.VITE_HCAPTCHA_SITEKEY ? import.meta.env.VITE_HCAPTCHA_SITEKEY : "10000000-ffff-ffff-ffff-000000000001"}
                                 theme="dark"
+                                onVerify={(r) => { r && setRegisterForm({ ...registerForm, captcha: r }) }}
                             />
                             <Button text="Register" />
-                        </RegisterForm>
-                    </RegisterPopup>
+                        </PopupForm>
+                    </Popup>
                 )}
                 <Button id="login-button" text="Login" onClick={changeLogin} />
                 {loginOpened && (
-                    <RegisterPopup id="login-popup">
-                        <RegisterCaption><span className="wave">👋</span> Welcome back!</RegisterCaption>
-                        <RegisterSubCaption>Sign into Flowee</RegisterSubCaption>
-                        <RegisterForm>
-                            <Input placeholder="Username" />
-                            <Input placeholder="Password" type="password" />
+                    <Popup id="login-popup">
+                        <PopupCaption><span className="wave">👋</span> Welcome back!</PopupCaption>
+                        <PopupSubCaption>Sign into Flowee</PopupSubCaption>
+                        {loginForm.errorMessage && <PopupError>{loginForm.errorMessage}</PopupError>}
+                        <PopupForm onSubmit={submitLogin}>
+                            <Input placeholder="Username" onChange={(e) => { setLoginForm({ ...loginForm, username: e.target.value }) }} required />
+                            <Input placeholder="Password" type="password" onChange={(e) => { setLoginForm({ ...loginForm, password: e.target.value }) }} required />
                             <Button text="Login" />
-                        </RegisterForm>
-                    </RegisterPopup>
+                        </PopupForm>
+                    </Popup>
                 )}
             </ProfileWrapper>
         </Wrapper>
@@ -91,7 +158,7 @@ const ProfileWrapper = styled.div`
     gap: 5px;
 `
 
-const RegisterPopup = styled.div`
+const Popup = styled.div`
     position: absolute;
     right: 100px;
     z-index: 20;
@@ -111,21 +178,25 @@ const RegisterPopup = styled.div`
         transform: translate(50%, 0%);
     }
 `
-const RegisterCaption = styled.span`
+const PopupCaption = styled.span`
     font-size: 20px;
     color: white;
     font-weight: 600;
 `
-const RegisterSubCaption = styled.span`
+const PopupSubCaption = styled.span`
     color: white;
     font-weight: 600;
 `
+const PopupError = styled.span`
+    color: #ff5c74;
+    margin-top: 10px;
+`
 
-const RegisterForm = styled.form`
+const PopupForm = styled.form`
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-top: 15px;
+    margin-top: 10px;
 `
 
 export default Header
