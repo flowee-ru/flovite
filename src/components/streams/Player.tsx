@@ -2,11 +2,6 @@ import flvjs from "flv.js"
 import { useEffect } from "react"
 import styled from "styled-components"
 
-const Video = styled.video`
-    max-width: 1200px;
-    width: 100%;
-`
-
 type Props = {
     url: string
 }
@@ -26,5 +21,10 @@ function Player({ url }: Props) {
 
     return <Video id="video" controls />
 }
+
+const Video = styled.video`
+    max-width: 1200px;
+    width: 100%;
+`
 
 export default Player

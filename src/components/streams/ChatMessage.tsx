@@ -1,17 +1,21 @@
 import styled from "styled-components"
 
+import Avatar from "../Avatar"
+
 type Props = {
     username: string,
+    timestamp: number,
+    avatar: string,
     content: string
 }
 
-function ChatMessage({ username, content }: Props) {
+function ChatMessage(props: Props) {
     return (
         <Wrapper>
-            <Avatar src="https://github.com/mdo.png" alt="mdo" width="45" className="unselectable" />
+            <Avatar avatar={props.avatar} username={props.username} />
             <MessageWrapper>
-                <Username>{username}</Username>
-                <Message>{content}</Message>
+                <Username>{props.username}</Username>
+                <Message>{props.content}</Message>
             </MessageWrapper>
         </Wrapper>
     )
@@ -20,15 +24,6 @@ function ChatMessage({ username, content }: Props) {
 const Wrapper = styled.div`
     display: flex;
     gap: 10px;
-`
-
-const Avatar = styled.img`
-    max-width: 45px;
-    max-height: 45px;
-    min-width: 45px;
-    min-height: 45px;
-    border-radius: 100%;
-    margin-top: 3px;
 `
 
 const MessageWrapper = styled.div`
@@ -42,6 +37,7 @@ const Username = styled.span`
 `
 const Message = styled.span`
     color: white;
+    word-break: break-all;
 `
 
 export default ChatMessage

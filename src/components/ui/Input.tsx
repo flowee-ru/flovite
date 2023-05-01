@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from "react"
+import { ChangeEventHandler, KeyboardEventHandler } from "react"
 import styled from "styled-components"
 
 type Props = {
@@ -6,13 +6,15 @@ type Props = {
     placeholder?: string,
     name?: string,
     style?: React.CSSProperties,
+    id?: string,
     onChange?: ChangeEventHandler<HTMLInputElement>,
+    onKeyDown?: KeyboardEventHandler<HTMLInputElement>,
     required?: boolean
 }
 
 function Input(props: Props) {
     return (
-        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} onChange={props.onChange} required={props.required} />
+        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} onChange={props.onChange} required={props.required} onKeyDown={props.onKeyDown} id={props.id} />
     )
 }
 

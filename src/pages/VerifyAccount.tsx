@@ -37,7 +37,7 @@ function VerifyAccount() {
             console.log(err)
             setStatus('Unexpected error, please try again')
         })
-    }, [navigate, searchParams])
+    }, [navigate, searchParams, setCookie])
 
     return (
         <>
