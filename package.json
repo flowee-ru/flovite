@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "sirv dist --cors --single --host --port 8080"
+    "build:start": "tsc && vite build && sirv dist --cors --single --host --port 8080"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.8.1",
