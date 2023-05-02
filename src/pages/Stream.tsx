@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
@@ -107,8 +107,8 @@ function Profile() {
 		}
 	}, [info?.accountID])
 
-	const sendMessage = (e: KeyboardEvent<HTMLInputElement>) => {
-		if(e.code != 'Enter') return
+	const sendMessage = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
 
 		if(!info?.accountID) return
 
@@ -164,7 +164,9 @@ function Profile() {
 							return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
 						})}
 					</MessagesBox>
-					<Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px' }} onKeyDown={sendMessage} id="message-input" autoComplete="off" />
+					<form onSubmit={sendMessage} style={{ display: 'flex' }}>
+						<Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px', width: '100%' }} id="message-input" autoComplete="off" />
+					</form>
 				</ChatWrapper>
 			</Wrapper>
 			)}
