@@ -31,7 +31,7 @@ type AccountInfo = {
 	isFollowing: boolean
 }
 
-function b64DecodeUnicode(str: string) {
+function decodeUnicode(str: string) {
 	return decodeURIComponent(atob(str).split('').map(function(c) {
 		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
 	}).join(''))
@@ -85,13 +85,15 @@ function Profile() {
 		if(lastMessage) {
 			const messagesBox = document.getElementById('messages-box') as HTMLDivElement
 
+			console.log(lastMessage.data)
+
 			setMessageHistory(old => {
 				const parts = (lastMessage.data as string).split('|')
 				return old.concat({
 					timestamp: Number(parts[0]),
-					author: b64DecodeUnicode(parts[1]),
+					author: decodeUnicode(parts[1]),
 					avatar: parts[2],
-					content: b64DecodeUnicode(parts[3])
+					content: decodeUnicode(parts[3])
 				})
 			})
 
