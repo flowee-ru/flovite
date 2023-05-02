@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react"
+import { KeyboardEvent, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import axios from "axios"
@@ -108,9 +108,7 @@ function Profile() {
 		}
 	}, [info?.accountID])
 
-	const sendMessage = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
-
+	const sendMessage = () => {
 		if(!info?.accountID) return
 
 		const input = (document.getElementById('message-input') as HTMLInputElement)
@@ -165,10 +163,10 @@ function Profile() {
 							return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
 						})}
 					</MessagesBox>
-					<MessageInputForm onSubmit={sendMessage}>
-						<Input placeholder="Type your message" style={{ width: '100%' }} id="message-input" autoComplete="off" />
-						<Button text="Send" />
-					</MessageInputForm>
+					<MessageInput>
+						<Input placeholder="Type your message" style={{ width: '100%' }} id="message-input" autoComplete="off" onKeyDown={(e) => { e.code == 'Enter' && sendMessage() }} />
+						<Button text="Send" onClick={() => { sendMessage() }} />
+					</MessageInput>
 				</ChatWrapper>
 			</Wrapper>
 			)}
@@ -211,7 +209,7 @@ const StreamWrapper = styled.div`
 	gap: 10px;
 `
 
-const MessageInputForm = styled.form`
+const MessageInput = styled.div`
 	display: flex;
 	margin-left: 10px;
 	margin-right: 10px;
