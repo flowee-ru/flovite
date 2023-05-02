@@ -10,6 +10,7 @@ import ChatMessage from "../components/streams/ChatMessage"
 import Loader from "../components/Loader"
 import Avatar from "../components/Avatar"
 import { useCookies } from "react-cookie"
+import Button from "../components/ui/Button"
 
 type Message = {
 	timestamp: number,
@@ -164,9 +165,10 @@ function Profile() {
 							return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
 						})}
 					</MessagesBox>
-					<form onSubmit={sendMessage} style={{ display: 'flex' }}>
-						<Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px', width: '100%' }} id="message-input" autoComplete="off" />
-					</form>
+					<MessageInputForm onSubmit={sendMessage}>
+						<Input placeholder="Type your message" style={{ width: '100%' }} id="message-input" autoComplete="off" />
+						<Button text="Send" />
+					</MessageInputForm>
 				</ChatWrapper>
 			</Wrapper>
 			)}
@@ -207,6 +209,13 @@ const StreamWrapper = styled.div`
 	max-width: 1200px;
 	width: 100%;
 	gap: 10px;
+`
+
+const MessageInputForm = styled.form`
+	display: flex;
+	margin-left: 10px;
+	margin-right: 10px;
+	gap: 5px;
 `
 
 const InfoWrapper = styled.div`
