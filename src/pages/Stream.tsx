@@ -69,12 +69,12 @@ function Profile() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const { lastMessage } = useWebSocket('ws://127.0.0.1:8081/ws?stream=' + info?.accountID, {
-		onOpen: () => {
-			console.log('Websocket connection established')
+	const { lastMessage } = useWebSocket(import.meta.env.VITE_EVENTS_HOST + '?stream=' + info?.accountID, {
+		onOpen: (e) => {
+			console.log(e)
 		},
-		onClose: () => {
-			console.log('Websocket connection closed')
+		onClose: (e) => {
+			console.log(e)
 		},
 		onError: (err) => {
 			console.log(err)
