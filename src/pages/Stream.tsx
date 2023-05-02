@@ -69,7 +69,7 @@ function Profile() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const { lastMessage } = useWebSocket(import.meta.env.VITE_EVENTS_HOST + '?stream=' + info?.accountID, {
+	const { lastMessage } = useWebSocket('ws://127.0.0.1:8081/ws?stream=' + info?.accountID, {
 		onOpen: (e) => {
 			console.log(e)
 		},
