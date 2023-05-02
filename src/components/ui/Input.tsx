@@ -1,20 +1,9 @@
-import { ChangeEventHandler, KeyboardEventHandler } from "react"
+import { ComponentPropsWithoutRef } from "react"
 import styled from "styled-components"
 
-type Props = {
-    type?: string,
-    placeholder?: string,
-    name?: string,
-    style?: React.CSSProperties,
-    id?: string,
-    onChange?: ChangeEventHandler<HTMLInputElement>,
-    onKeyDown?: KeyboardEventHandler<HTMLInputElement>,
-    required?: boolean
-}
-
-function Input(props: Props) {
+function Input(props: ComponentPropsWithoutRef<'input'>) {
     return (
-        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} onChange={props.onChange} required={props.required} onKeyDown={props.onKeyDown} id={props.id} />
+        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} onChange={props.onChange} required={props.required} onKeyDown={props.onKeyDown} id={props.id} {...props} />
     )
 }
 
@@ -27,7 +16,7 @@ const Field = styled.input`
     background-color: #333333;
     border: none;
     outline: none;
-    font-size: 18px;
+    font-size: 16px;
     transition: outline 0.1s;
     caret-color: #8815ff;
     outline-color: #8815ff;

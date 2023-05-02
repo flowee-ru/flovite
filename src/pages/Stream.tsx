@@ -1,7 +1,6 @@
 import { KeyboardEvent, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
-import useWebSocket from "react-use-websocket"
 import axios from "axios"
 
 import Header from "../components/Header"
@@ -66,54 +65,61 @@ function Profile() {
 			console.log(err)
 			setError('Failed to fetch info, please try again')
 		})
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	const { lastMessage } = useWebSocket(import.meta.env.VITE_EVENTS_HOST + '?stream=' + info?.accountID, {
-		onOpen: () => {
-			console.log('Websocket connection established')
-		},
-		onClose: () => {
-			console.log('Websocket connection closed')
-		},
-		onError: (err) => {
-			console.log(err)
-		}
-	})
+	}, [username])
 
 	useEffect(() => {
-		if(lastMessage) {
-			const messagesBox = document.getElementById('messages-box') as HTMLDivElement
+		if(info?.accountID) {
+			const ws = new WebSocket(import.meta.env.VITE_EVENTS_HOST + '?stream=' + info?.accountID)
 
-			console.log(lastMessage.data)
+			ws.onopen = () => {
+				console.log('Websocket connection established')
+			}
+			ws.onclose = () => {
+				console.log('Websocket connection closed')
+			}
+			ws.onerror = (err) => {
+				console.log(err)
+			}
 
-			setMessageHistory(old => {
-				const parts = (lastMessage.data as string).split('|')
-				return old.concat({
-					timestamp: Number(parts[0]),
-					author: decodeUnicode(parts[1]),
-					avatar: parts[2],
-					content: decodeUnicode(parts[3])
+			ws.onmessage = (msg) => {
+				console.log(msg)
+
+				setMessageHistory(old => {
+					const parts = (msg.data as string).split('|')
+					return old.concat({
+						timestamp: Number(parts[0]),
+						author: decodeUnicode(parts[1]),
+						avatar: parts[2],
+						content: decodeUnicode(parts[3])
+					})
 				})
-			})
 
-			if(Math.abs(messagesBox.scrollHeight - messagesBox.scrollTop - messagesBox.clientHeight) < 1) {
-				setTimeout(() => { messagesBox.scrollTo(0, messagesBox.scrollHeight) }, 100)
+				const messagesBox = document.getElementById('messages-box') as HTMLDivElement
+
+				if(Math.abs(messagesBox.scrollHeight - messagesBox.scrollTop - messagesBox.clientHeight) < 1) {
+					setTimeout(() => { messagesBox.scrollTo(0, messagesBox.scrollHeight) }, 100)
+				}
+			}
+
+			return () => {
+				ws.close()
 			}
 		}
-	}, [lastMessage])
+	}, [info?.accountID])
 
 	const sendMessage = (e: KeyboardEvent<HTMLInputElement>) => {
 		if(e.code != 'Enter') return
 
 		if(!info?.accountID) return
 
-		const content = (document.getElementById('message-input') as HTMLInputElement).value
+		const input = (document.getElementById('message-input') as HTMLInputElement)
 
 		const data = new URLSearchParams()
 		data.append('stream', info?.accountID)
 		data.append('token', cookie.token)
-		data.append('content', content)
+		data.append('content', input.value)
+
+		input.value = ''
 
 		axios.post(import.meta.env.VITE_API_HOST + '/chat/sendMessage', data)
 		.then(res => {
@@ -135,7 +141,7 @@ function Profile() {
 			) : (
 			<Wrapper>
 				<StreamWrapper>
-					{info?.isLive ? <Player url={info.streamURL} /> : (
+					{info?.isLive ? <Player url={import.meta.env.VITE_MONDAY_HOST + '/' + info.accountID} /> : (
 						<NoStreamWrapper>
 							<NoStream>USER IS OFFLINE</NoStream>
 						</NoStreamWrapper>
@@ -158,7 +164,7 @@ function Profile() {
 							return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
 						})}
 					</MessagesBox>
-					<Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px' }} onKeyDown={sendMessage} id="message-input" />
+					<Input placeholder="Type your message" style={{ marginLeft: '10px', marginRight: '10px' }} onKeyDown={sendMessage} id="message-input" autoComplete="off" />
 				</ChatWrapper>
 			</Wrapper>
 			)}
@@ -277,6 +283,9 @@ const NoStreamWrapper = styled.div`
 	height: 400px;
     width: 100%;
 	background-color: #222222;
+	@media screen and (max-width: 950px) {
+		height: 250px;
+	}
 `
 const NoStream = styled.span`
 	color: white;
