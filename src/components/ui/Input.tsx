@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 function Input(props: ComponentPropsWithoutRef<'input'>) {
     return (
-        <Field type={props.type || 'text'} placeholder={props.placeholder} name={props.name} style={props.style} onChange={props.onChange} required={props.required} onKeyDown={props.onKeyDown} id={props.id} {...props} />
+        <Field {...props} />
     )
 }
 

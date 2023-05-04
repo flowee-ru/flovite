@@ -1,15 +1,14 @@
+import { ComponentPropsWithoutRef } from "react"
 import styled from "styled-components"
 
-type Props = {
+interface Props extends ComponentPropsWithoutRef<'button'> {
     text: string,
-    style?: React.CSSProperties,
-    id?: string,
-    onClick?: React.MouseEventHandler<HTMLButtonElement>
+    color?: string
 }
 
 function Button(props: Props) {
     return (
-        <Wrapper style={props.style} onClick={props.onClick} id={props.id}>
+        <Wrapper style={{ backgroundColor: props.color || '#8815ff' }} {...props}>
             {props.text}
         </Wrapper>
     )
@@ -21,7 +20,6 @@ const Wrapper = styled.button`
     padding-top: 5px;
     padding-bottom: 5px;
     color: white;
-    background-color: #8815ff;
     border: none;
     font-weight: bold;
     font-size: 16px;

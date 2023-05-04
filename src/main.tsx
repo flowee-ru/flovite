@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import './styles/globals.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import Home from './pages/Home.tsx'
 import Stream from './pages/Stream.tsx'

@@ -13,6 +13,7 @@
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.8.1",
     "axios": "^1.4.0",
+    "bootstrap-icons": "^1.10.5",
     "flv.js": "^1.6.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
