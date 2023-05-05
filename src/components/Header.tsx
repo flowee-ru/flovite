@@ -63,7 +63,7 @@ function Header() {
         data.append('password', registerForm.password)
         data.append('captcha', registerForm.captcha)
 
-        axios.post(import.meta.env.VITE_API_HOST + '/auth/register', data)
+        axios.post(`${import.meta.env.VITE_API_HOST}/users/register`, data)
         .then(res => {
             console.log(res.data)
             setRegisterForm({ ...registerForm, loading: false })
@@ -109,7 +109,7 @@ function Header() {
         data.append('username', loginForm.username)
         data.append('password', loginForm.password)
 
-        axios.post(import.meta.env.VITE_API_HOST + '/auth/login', data)
+        axios.post(import.meta.env.VITE_API_HOST + '/users/login', data)
         .then(res => {
             console.log(res.data)
             setLoginForm({ ...loginForm, loading: false })

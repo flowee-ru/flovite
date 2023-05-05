@@ -21,7 +21,7 @@ function VerifyAccount() {
         const data = new URLSearchParams()
         data.append('verifyToken', token)
 
-        axios.post(import.meta.env.VITE_API_HOST + '/auth/verifyAccount', data)
+        axios.post(`${import.meta.env.VITE_API_HOST}/users/verifyAccount`, data)
         .then(res => {
             console.log(res.data)
             if(res.data.success) {

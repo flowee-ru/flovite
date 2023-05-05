@@ -51,7 +51,7 @@ function Profile() {
 	useEffect(() => {
 		document.title = `Flowee`
 
-		axios.get(import.meta.env.VITE_API_HOST + '/users/getInfo?username=' + username)
+		axios.get(`${import.meta.env.VITE_API_HOST}/users/username/${username}`)
 		.then(res => {
 			console.log(res.data)
 			if(res.data.success) {
@@ -70,7 +70,7 @@ function Profile() {
 
 	useEffect(() => {
 		if(info?.accountID) {
-			const ws = new WebSocket(import.meta.env.VITE_EVENTS_HOST + '?stream=' + info?.accountID)
+			const ws = new WebSocket(`${import.meta.env.VITE_EVENTS_HOST}/users/${info?.accountID}/chat/ws`)
 
 			ws.onopen = () => {
 				console.log('Websocket connection established')
@@ -113,14 +113,15 @@ function Profile() {
 
 		const input = (document.getElementById('message-input') as HTMLInputElement)
 
+		if(input.value == '') return
+
 		const data = new URLSearchParams()
-		data.append('stream', info?.accountID)
 		data.append('token', cookie.token)
 		data.append('content', input.value)
 
 		input.value = ''
 
-		axios.post(import.meta.env.VITE_API_HOST + '/chat/sendMessage', data)
+		axios.post(`${import.meta.env.VITE_API_HOST}/users/${info?.accountID}/chat/send`, data)
 		.then(res => {
 			console.log(res.data)
 		})
