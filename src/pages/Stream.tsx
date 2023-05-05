@@ -111,7 +111,7 @@ function Profile() {
 	const sendMessage = () => {
 		if(!info?.accountID) return
 
-		const input = (document.getElementById('message-input') as HTMLInputElement)
+		const input = document.getElementById('message-input') as HTMLInputElement
 
 		if(input.value == '') return
 
