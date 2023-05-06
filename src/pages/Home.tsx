@@ -29,8 +29,10 @@ function Home() {
 			setLiveLoading(false)
 
 			if(res.data.success) {
-				setLiveMessage(null)
-				setLiveData(res.data.users)
+				if(res.data.users.length > 0) {
+					setLiveMessage(null)
+					setLiveData(res.data.users)
+				}
 			} else {
 				setLiveMessage('Failed to fetch data, please try again')
 			}
