@@ -1,12 +1,45 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
+import axios from "axios"
 
 import Header from "../components/Header"
 import Button from "../components/ui/Button"
+import UserCard from "../components/UserCard"
+import Loader from "../components/Loader"
+
+type UserData = {
+	username: string,
+	avatar: string,
+	streamName: string
+}
 
 function Home() {
+	const [liveLoading, setLiveLoading] = useState(true)
+	const [liveMessage, setLiveMessage] = useState<string | null>('No one is streaming right now')
+	const [liveData, setLiveData] = useState<UserData[]>()
+
 	useEffect(() => {
-		document.title = `Flowee - Home`
+		document.title = `Home - Flowee`
+
+		setLiveLoading(true)
+
+		axios.get(`${import.meta.env.VITE_API_HOST}/users`)
+		.then(res => {
+			console.log(res.data)
+			setLiveLoading(false)
+
+			if(res.data.success) {
+				setLiveMessage(null)
+				setLiveData(res.data.users)
+			} else {
+				setLiveMessage('Failed to fetch data, please try again')
+			}
+		})
+		.catch(err => {
+			console.log(err)
+			setLiveLoading(false)
+			setLiveMessage('Failed to fetch data, please try again')
+		})
 	}, [])
 
 	return (
@@ -22,8 +55,16 @@ function Home() {
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
 					<span style={{ fontSize: '20px', fontWeight: '700' }}><i className="bi bi-broadcast" /> LIVE</span>
-					<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-						{/* <UserCard streamName="test" avatar="default" username="myst" /> */}
+					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+						{liveLoading ? <Loader /> : (
+							<>
+								{liveMessage ? <span>{liveMessage}</span> : (
+									liveData?.map((user: UserData, i) => {
+										return <UserCard key={i} streamName={user.streamName} avatar={user.avatar} username={user.username} />
+									})
+								)}
+							</>
+						)}
 					</div>
 				</div>
 			</Wrapper>

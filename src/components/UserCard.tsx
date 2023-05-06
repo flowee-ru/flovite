@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import Avatar from "./Avatar"
+import { Link } from "react-router-dom"
 
 type Props = {
     streamName: string,
@@ -9,16 +10,18 @@ type Props = {
 
 function UserCard(props: Props) {
     return (
-        <Wrapper>
-            <StreamName>{props.streamName.length > 30 ? props.streamName.slice(0, 30) + '...' : props.streamName}</StreamName>
-            <UserWrapper>
-                <Avatar avatar={props.avatar} username={props.username} />
-                <UserInfo>
-                    <Username>{props.username}</Username>
-                    {/* <Followers>15,4K followers</Followers> */}
-                </UserInfo>
-            </UserWrapper>
-        </Wrapper>
+        <Link to={`/${props.username}`}>
+            <Wrapper>
+                <StreamName>{props.streamName.length > 30 ? props.streamName.slice(0, 30) + '...' : props.streamName}</StreamName>
+                <UserWrapper>
+                    <Avatar avatar={props.avatar} username={props.username} />
+                    <UserInfo>
+                        <Username>{props.username}</Username>
+                        {/* <Followers>15,4K followers</Followers> */}
+                    </UserInfo>
+                </UserWrapper>
+            </Wrapper>
+        </Link>
     )
 }
 
@@ -29,6 +32,10 @@ const Wrapper = styled.div`
     padding: 10px;
     border-radius: 10px;
     background-color: #333;
+    transition: 0.2s opacity;
+    &:hover {
+        opacity: 0.8;
+    }
 `
 
 const StreamName = styled.span`

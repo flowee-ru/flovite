@@ -9,6 +9,7 @@ import Stream from './pages/Stream.tsx'
 import VerifyAccount from './pages/VerifyAccount.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import NotFound from './pages/NotFound.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,12 @@ const router = createBrowserRouter([
   {
     path: '/verify',
     element: <VerifyAccount />
+  },
+  
+  // handle 404 error
+  {
+    path: '/*',
+    element: <NotFound />
   }
 ])
 

@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { FormEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { Link, Form } from "react-router-dom"
 import HCaptcha from "@hcaptcha/react-hcaptcha"
 
@@ -7,6 +7,8 @@ import Button from "./ui/Button"
 import Input from "./ui/Input"
 import axios from "axios"
 import { useCookies } from "react-cookie"
+import Loader from "./Loader"
+import Avatar from "./Avatar"
 
 type RegisterForm = {
     username?: string,
@@ -24,6 +26,11 @@ type LoginForm = {
     loading: boolean
 }
 
+type AuthData = {
+    username: string,
+    avatar: string
+}
+
 function Header() {
     const [registerOpened, setRegisterOpened] = useState(false)
     const [loginOpened, setLoginOpened] = useState(false)
@@ -31,15 +38,47 @@ function Header() {
     const [registerForm, setRegisterForm] = useState<RegisterForm>({ loading: false })
     const [loginForm, setLoginForm] = useState<LoginForm>({ loading: false })
 
-    const [, setCookie] = useCookies(['token'])
+    const [loading, setLoading] = useState(true)
+    const [authenticated, setAuthenticated] = useState(false)
+    const [authData, setAuthData] = useState<AuthData>()
 
-    document.onclick = (e) => {
-        const el = e.target as HTMLElement
-        if(!el.closest('#register-button') && !el.closest('#register-popup') && !el.closest('#login-button') && !el.closest('#login-popup')) {
-            setRegisterOpened(false)
-            setLoginOpened(false)
+    const [cookie, setCookie] = useCookies(['token'])
+
+    useEffect(() => {
+        document.onclick = (e) => {
+            const el = e.target as HTMLElement
+            if(!el.closest('#register-button') && !el.closest('#register-popup') && !el.closest('#login-button') && !el.closest('#login-popup')) {
+                setRegisterOpened(false)
+                setLoginOpened(false)
+            }
         }
-    }
+
+        const token = cookie.token as string
+
+        if(token) {
+            const data = new URLSearchParams()
+            data.append('token', token)
+    
+            axios.post(`${import.meta.env.VITE_API_HOST}/users/verifyToken`, data)
+            .then(res => {
+                console.log(res.data)
+                setLoading(false)
+
+                if(res.data.success) {
+                    setAuthenticated(true)
+                    setAuthData({
+                        username: res.data.username,
+                        avatar: res.data.avatar
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                setLoading(false)
+            })
+        } else setLoading(false)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const changeRegister = () => {
         setRegisterOpened(true)
@@ -143,44 +182,58 @@ function Header() {
             <Form action="/search" method="GET" style={{ maxWidth: '500px', width: '100%', display: 'flex' }}>
                 <Input placeholder="Search users..." name="q" style={{ width: '100%' }} />
             </Form>
-            <ProfileWrapper>
-                <Button id="register-button" text="Register" onClick={changeRegister} />
-                {registerOpened && (
-                    <Popup id="register-popup">
-                        <PopupCaption><span className="wave">👋</span> Hello!</PopupCaption>
-                        <PopupSubCaption>Create an account</PopupSubCaption>
-                        {registerForm.errorMessage && <PopupError>{registerForm.errorMessage}</PopupError>}
-                        {registerForm.successMessage && <PopupSuccess>{registerForm.successMessage}</PopupSuccess>}
-                        <PopupForm onSubmit={submitRegister}>
-                            <Input placeholder="Username" onChange={(e) => { setRegisterForm({ ...registerForm, username: e.target.value }) }} required />
-                            <Input placeholder="E-mail" type="email" onChange={(e) => { setRegisterForm({ ...registerForm, email: e.target.value }) }} required />
-                            <Input placeholder="Password" type="password" onChange={(e) => { setRegisterForm({ ...registerForm, password: e.target.value }) }} required />
-                            <HCaptcha
-                                sitekey={import.meta.env.VITE_HCAPTCHA_SITEKEY ? import.meta.env.VITE_HCAPTCHA_SITEKEY : "10000000-ffff-ffff-ffff-000000000001"}
-                                theme="dark"
-                                onVerify={(r) => { r && setRegisterForm({ ...registerForm, captcha: r }) }}
-                            />
-                            <Button text="Register" />
-                        </PopupForm>
-                    </Popup>
-                )}
-                <Button id="login-button" text="Login" onClick={changeLogin} />
-                {loginOpened && (
-                    <Popup id="login-popup">
-                        <PopupCaption><span className="wave">👋</span> Welcome back!</PopupCaption>
-                        <PopupSubCaption>Sign into Flowee</PopupSubCaption>
-                        {loginForm.errorMessage && <PopupError>{loginForm.errorMessage}</PopupError>}
-                        <PopupForm onSubmit={submitLogin}>
-                            <Input placeholder="Username" onChange={(e) => { setLoginForm({ ...loginForm, username: e.target.value }) }} required />
-                            <Input placeholder="Password" type="password" onChange={(e) => { setLoginForm({ ...loginForm, password: e.target.value }) }} required />
-                            <Button text="Login" />
-                        </PopupForm>
-                    </Popup>
-                )}
-            </ProfileWrapper>
+            {loading ? <Loader /> : (
+                authenticated ? (
+                    <ProfileWrapper style={{ alignItems: 'center' }}>
+                        {/* <Link to="/settings"><GearIcon className="bi bi-gear-fill" /></Link> */}
+                        <Link to={`/${authData?.username}`}><Avatar avatar={authData?.avatar} username={authData?.username} /></Link>
+                    </ProfileWrapper>
+                ) : (
+                    <ProfileWrapper>
+                        <Button id="register-button" text="Register" onClick={changeRegister} />
+                        {registerOpened && (
+                            <Popup id="register-popup">
+                                <PopupCaption><span className="wave">👋</span> Hello!</PopupCaption>
+                                <PopupSubCaption>Create an account</PopupSubCaption>
+                                {registerForm.errorMessage && <PopupError>{registerForm.errorMessage}</PopupError>}
+                                {registerForm.successMessage && <PopupSuccess>{registerForm.successMessage}</PopupSuccess>}
+                                <PopupForm onSubmit={submitRegister}>
+                                    <Input placeholder="Username" onChange={(e) => { setRegisterForm({ ...registerForm, username: e.target.value }) }} required />
+                                    <Input placeholder="E-mail" type="email" onChange={(e) => { setRegisterForm({ ...registerForm, email: e.target.value }) }} required />
+                                    <Input placeholder="Password" type="password" onChange={(e) => { setRegisterForm({ ...registerForm, password: e.target.value }) }} required />
+                                    <HCaptcha
+                                        sitekey={import.meta.env.VITE_HCAPTCHA_SITEKEY ? import.meta.env.VITE_HCAPTCHA_SITEKEY : "10000000-ffff-ffff-ffff-000000000001"}
+                                        theme="dark"
+                                        onVerify={(r) => { r && setRegisterForm({ ...registerForm, captcha: r }) }}
+                                    />
+                                    <Button text="Register" />
+                                </PopupForm>
+                            </Popup>
+                        )}
+                        <Button id="login-button" text="Login" onClick={changeLogin} />
+                        {loginOpened && (
+                            <Popup id="login-popup">
+                                <PopupCaption><span className="wave">👋</span> Welcome back!</PopupCaption>
+                                <PopupSubCaption>Sign into Flowee</PopupSubCaption>
+                                {loginForm.errorMessage && <PopupError>{loginForm.errorMessage}</PopupError>}
+                                <PopupForm onSubmit={submitLogin}>
+                                    <Input placeholder="Username" onChange={(e) => { setLoginForm({ ...loginForm, username: e.target.value }) }} required />
+                                    <Input placeholder="Password" type="password" onChange={(e) => { setLoginForm({ ...loginForm, password: e.target.value }) }} required />
+                                    <Button text="Login" />
+                                </PopupForm>
+                            </Popup>
+                        )}
+                    </ProfileWrapper>
+                )
+            )}
         </Wrapper>
 	)
 }
+
+// const GearIcon = styled.i`
+//     color: white;
+//     font-size: 25px;
+// `
 
 const Wrapper = styled.header`
     display: flex;
@@ -202,7 +255,7 @@ const Wrapper = styled.header`
 
 const ProfileWrapper = styled.div`
     display: flex;
-    gap: 5px;
+    gap: 10px;
 `
 
 const Popup = styled.div`
