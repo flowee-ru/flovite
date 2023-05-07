@@ -1,11 +1,13 @@
-FROM node:18-alpine
+FROM node:18-buster AS builder
 
 WORKDIR /usr/src/app
-
 COPY . .
 
-RUN npm install
+RUN yarn install
 
-EXPOSE 8000
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app .
 
-CMD ["npm", "run", "build:start"]
+EXPOSE 8080
+CMD ["yarn", "build:start"]
