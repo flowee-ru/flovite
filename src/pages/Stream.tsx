@@ -71,18 +71,31 @@ function Profile() {
 	useEffect(() => {
 		if(info?.accountID) {
 			const ws = new WebSocket(`${import.meta.env.VITE_EVENTS_HOST}/users/${info?.accountID}/chat/ws`)
+			let i: number
 
-			ws.onopen = () => {
+			ws.onopen = (e) => {
 				console.log('Websocket connection established')
+				console.log(e)
+
+				// ping websocket every 30 seconds
+				i = setInterval(() => {
+					ws.send('ping')
+				}, 30000)
 			}
-			ws.onclose = () => {
+			ws.onclose = (e) => {
 				console.log('Websocket connection closed')
+				console.log(e)
 			}
 			ws.onerror = (err) => {
 				console.log(err)
 			}
 
 			ws.onmessage = (msg) => {
+				if(msg.data == 'pong') {
+					console.log('Websocket pinged')
+					return
+				}
+
 				console.log(msg)
 
 				setMessageHistory(old => {
@@ -104,6 +117,7 @@ function Profile() {
 
 			return () => {
 				ws.close()
+				if(i) clearInterval(i)
 			}
 		}
 	}, [info?.accountID])
@@ -158,7 +172,7 @@ function Profile() {
 					</InfoWrapper>
 				</StreamWrapper>
 				<ChatWrapper>
-					<ChatTitle>CHAT</ChatTitle>
+					<ChatTitle>CHAT (BETA)</ChatTitle>
 					<MessagesBox className="no-scrollbar" id="messages-box">
 						{messageHistory.map((msg, i) => {
 							return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
