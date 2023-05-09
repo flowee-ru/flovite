@@ -70,7 +70,7 @@ function Profile() {
 
 	useEffect(() => {
 		if(info?.accountID) {
-			const ws = new WebSocket(`${import.meta.env.VITE_EVENTS_HOST}/users/${info?.accountID}/chat/ws`)
+			const ws = new WebSocket(`${import.meta.env.VITE_EVENTS_HOST}/users/${info?.accountID}/ws`)
 			let i: number
 
 			ws.onopen = (e) => {

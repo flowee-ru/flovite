@@ -77,7 +77,6 @@ function Header() {
                 setLoading(false)
             })
         } else setLoading(false)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const changeRegister = () => {
@@ -115,15 +114,18 @@ function Header() {
                         setRegisterForm({ ...registerForm, errorMessage: 'Username must be > 3 and < 15 symbols', successMessage: '' })
                         break
                     case 2:
-                        setRegisterForm({ ...registerForm, errorMessage: 'Failed to verify captcha, try again', successMessage: '' })
+                        setRegisterForm({ ...registerForm, errorMessage: 'Bad username, please try another one', successMessage: '' })
                         break
                     case 3:
-                        setRegisterForm({ ...registerForm, errorMessage: 'Username already taken', successMessage: '' })
+                        setRegisterForm({ ...registerForm, errorMessage: 'Failed to verify captcha, try again', successMessage: '' })
                         break
                     case 4:
-                        setRegisterForm({ ...registerForm, errorMessage: 'Account with this email already exists', successMessage: '' })
+                        setRegisterForm({ ...registerForm, errorMessage: 'Username already taken', successMessage: '' })
                         break
                     case 5:
+                        setRegisterForm({ ...registerForm, errorMessage: 'Account with this email already exists', successMessage: '' })
+                        break
+                    case 6:
                         setRegisterForm({ ...registerForm, errorMessage: 'Unexpected error, please try again', successMessage: '' })
                         break
 
@@ -185,7 +187,7 @@ function Header() {
             {loading ? <Loader /> : (
                 authenticated ? (
                     <ProfileWrapper style={{ alignItems: 'center' }}>
-                        {/* <Link to="/settings"><GearIcon className="bi bi-gear-fill" /></Link> */}
+                        <Link to="/settings"><GearIcon className="bi bi-gear-fill" /></Link>
                         <Link to={`/${authData?.username}`}><Avatar avatar={authData?.avatar} username={authData?.username} /></Link>
                     </ProfileWrapper>
                 ) : (
@@ -230,10 +232,14 @@ function Header() {
 	)
 }
 
-// const GearIcon = styled.i`
-//     color: white;
-//     font-size: 25px;
-// `
+const GearIcon = styled.i`
+    color: white;
+    font-size: 25px;
+    margin-right: 10px;
+    @media screen and (max-width: 850px) {
+        margin-right: 0px;
+    }
+`
 
 const Wrapper = styled.header`
     display: flex;

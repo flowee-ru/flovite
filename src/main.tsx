@@ -7,6 +7,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import Home from './pages/Home.tsx'
 import Stream from './pages/Stream.tsx'
 import VerifyAccount from './pages/VerifyAccount.tsx'
+import Settings from './pages/Settings.tsx'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import NotFound from './pages/NotFound.tsx'
@@ -24,7 +25,10 @@ const router = createBrowserRouter([
     path: '/verify',
     element: <VerifyAccount />
   },
-  
+  {
+    path: '/settings',
+    element: <Settings />
+  },
   // handle 404 error
   {
     path: '/*',
