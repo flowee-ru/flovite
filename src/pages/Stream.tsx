@@ -159,37 +159,37 @@ function Profile() {
 					<Error>{error}</Error>
 				</LoaderWrapper>
 			) : (
-			<Wrapper>
-				<StreamWrapper>
-					{info?.isLive ? <Player url={import.meta.env.VITE_MONDAY_HOST + '/' + info.accountID} /> : (
-						<NoStreamWrapper>
-							<NoStream>USER IS OFFLINE</NoStream>
-						</NoStreamWrapper>
-					)}
-					<InfoWrapper>
-						<Name>{info?.streamName}</Name>
-						<UserWrapper>
-							<Avatar avatar={info?.avatar} username={info?.username} />
-							<UserInfo>
-								<Username>{info?.username}</Username>
-								{/* <Followers>15,4K followers</Followers> */}
-							</UserInfo>
-						</UserWrapper>
-					</InfoWrapper>
-				</StreamWrapper>
-				<ChatWrapper>
-					<ChatTitle>CHAT (BETA)</ChatTitle>
-					<MessagesBox className="no-scrollbar" id="messages-box">
-						{messageHistory.map((msg, i) => {
-							return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
-						})}
-					</MessagesBox>
-					<MessageInput>
-						<Input placeholder={loggedIn ? "Type your message" : "Please login to send messages"} disabled={!loggedIn} style={{ width: '100%' }} id="message-input" autoComplete="off" onKeyDown={(e) => { e.code == 'Enter' && sendMessage() }} />
-						<Button text="Send" disabled={!loggedIn} onClick={() => { sendMessage() }} />
-					</MessageInput>
-				</ChatWrapper>
-			</Wrapper>
+				<Wrapper>
+					<StreamWrapper>
+						{info?.isLive ? <Player url={import.meta.env.VITE_MONDAY_HOST + '/' + info.accountID} /> : (
+							<NoStreamWrapper>
+								<NoStream>USER IS OFFLINE</NoStream>
+							</NoStreamWrapper>
+						)}
+						<InfoWrapper>
+							<Name>{info?.streamName}</Name>
+							<UserWrapper>
+								<Avatar avatar={info?.avatar} username={info?.username} />
+								<UserInfo>
+									<Username>{info?.username}</Username>
+									{/* <Followers>15,4K followers</Followers> */}
+								</UserInfo>
+							</UserWrapper>
+						</InfoWrapper>
+					</StreamWrapper>
+					<ChatWrapper>
+						<ChatTitle>CHAT (BETA)</ChatTitle>
+						<MessagesBox className="no-scrollbar" id="messages-box">
+							{messageHistory.map((msg, i) => {
+								return <ChatMessage username={msg.author} content={msg.content} timestamp={msg.timestamp} key={i} avatar={msg.avatar} />
+							})}
+						</MessagesBox>
+						<MessageInput>
+							<Input placeholder={loggedIn ? "Type your message" : "Please login to send messages"} disabled={!loggedIn} style={{ width: '100%' }} id="message-input" autoComplete="off" onKeyDown={(e) => { e.code == 'Enter' && sendMessage() }} />
+							<Button text="Send" disabled={!loggedIn} onClick={() => { sendMessage() }} />
+						</MessageInput>
+					</ChatWrapper>
+				</Wrapper>
 			)}
 		</>
 	)
