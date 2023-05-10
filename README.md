@@ -23,5 +23,5 @@ $ npm run build # or "yarn build"
 
 # Preview using Vite or sirv
 $ npm run preview # or "yarn preview" - using Vite
-$ npm run start # or "yarn preview" - using sirv
+$ npm run start # or "yarn start" - using sirv
 ```
