@@ -46,10 +46,16 @@ function Profile() {
 
 	const [info, setInfo] = useState<AccountInfo>()
 
+	const [loggedIn, setLoggedIn] = useState(false)
+
 	const [cookie] = useCookies(['token'])
 
 	useEffect(() => {
 		document.title = `Flowee`
+
+		if(cookie.token) {
+			setLoggedIn(true)
+		}
 
 		axios.get(`${import.meta.env.VITE_API_HOST}/users/username/${username}`)
 		.then(res => {
@@ -179,8 +185,8 @@ function Profile() {
 						})}
 					</MessagesBox>
 					<MessageInput>
-						<Input placeholder="Type your message" style={{ width: '100%' }} id="message-input" autoComplete="off" onKeyDown={(e) => { e.code == 'Enter' && sendMessage() }} />
-						<Button text="Send" onClick={() => { sendMessage() }} />
+						<Input placeholder={loggedIn ? "Type your message" : "Please login to send messages"} disabled={!loggedIn} style={{ width: '100%' }} id="message-input" autoComplete="off" onKeyDown={(e) => { e.code == 'Enter' && sendMessage() }} />
+						<Button text="Send" disabled={!loggedIn} onClick={() => { sendMessage() }} />
 					</MessageInput>
 				</ChatWrapper>
 			</Wrapper>

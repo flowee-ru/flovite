@@ -12,7 +12,10 @@ function Player({ url }: Props) {
             const video = document.getElementById('video') as HTMLVideoElement
             const player = flvjs.createPlayer({
                 type: 'flv',
+                isLive: true,
                 url
+            }, {
+                enableStashBuffer: true
             })
             player.attachMediaElement(video)
             player.load()

@@ -52,6 +52,7 @@ function Home() {
 					<span style={{ fontSize: '40px', fontWeight: '800' }}>Welcome!</span>
 					<span style={{ fontSize: '25px', fontWeight: '700' }}>Flowee is a streaming platform built for people</span>
 					<div style={{ display: 'flex', marginTop: '10px', gap: '5px' }}>
+						<a href="https://discord.gg/sevHE5GXT2"><Button text="Discord" color="#5865F2" /></a>
 						<a href="https://github.com/flowee-ru"><Button text="GitHub" color="#333" /></a>
 					</div>
 				</div>
