@@ -909,7 +909,7 @@ electron-to-chromium@^1.4.284:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.369.tgz"
   integrity sha512-LfxbHXdA/S+qyoTEA4EbhxGjrxx7WK2h6yb5K2v0UCOufUKX+VZaHbl3svlzZfv9sGseym/g3Ne4DpsgRULmqg==
 
-es6-promise@^4.2.8:
+es6-promise@^4.2.5:
   version "4.2.8"
   resolved "https://registry.npmjs.org/es6-promise/-/es6-promise-4.2.8.tgz"
   integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
@@ -1139,14 +1139,6 @@ flatted@^3.1.0:
   version "3.2.7"
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.7.tgz"
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
-
-flv.js@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.npmjs.org/flv.js/-/flv.js-1.6.2.tgz"
-  integrity sha512-xre4gUbX1MPtgQRKj2pxJENp/RnaHaxYvy3YToVVCrSmAWUu85b9mug6pTXF6zakUjNP2lFWZ1rkSX7gxhB/2A==
-  dependencies:
-    es6-promise "^4.2.8"
-    webworkify-webpack "^2.1.5"
 
 follow-redirects@^1.15.0:
   version "1.15.2"
@@ -1463,6 +1455,14 @@ minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
   dependencies:
     brace-expansion "^1.1.7"
+
+mpegts.js@^1.7.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/mpegts.js/-/mpegts.js-1.7.3.tgz#a422ed501d778fa86f9eef98d71fd62fc013f262"
+  integrity sha512-kqZ1C1IsbAQN72cK8vMrzKeM7hwrwSBbFAwVAc7PPweOeoZxCANrc7fAVDKMfYUzxdNkMTnec9tVmlxmKZB0TQ==
+  dependencies:
+    es6-promise "^4.2.5"
+    webworkify-webpack "^2.1.5"
 
 mri@^1.1.0:
   version "1.2.0"

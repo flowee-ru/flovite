@@ -1,4 +1,4 @@
-import flvjs from "flv.js"
+import mpegjs from "mpegts.js"
 import { useEffect } from "react"
 import styled from "styled-components"
 
@@ -8,11 +8,13 @@ type Props = {
 
 function Player({ url }: Props) {
     useEffect(() => {
-        if(flvjs.isSupported()) {
+        if(mpegjs.getFeatureList().mseLivePlayback) {
             const video = document.getElementById('video') as HTMLVideoElement
-            const player = flvjs.createPlayer({
+            const player = mpegjs.createPlayer({
                 type: 'flv',
                 isLive: true,
+                hasAudio: true,
+                hasVideo: true,
                 url
             }, {
                 enableStashBuffer: true
@@ -20,7 +22,7 @@ function Player({ url }: Props) {
             player.attachMediaElement(video)
             player.load()
         }
-    }, [url])
+    }, [])
 
     return <Video id="video" controls />
 }
